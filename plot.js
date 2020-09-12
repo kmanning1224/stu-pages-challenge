@@ -1,42 +1,23 @@
-// Use d3.json() to fetch data from JSON file
-// Incoming data is internally referred to as incomingData
-d3.json("data/data.json").then((incomingData) => {
-  function filterMovieRatings(movie) {
-    return movie.imdbRating > 8.9;
-  }
-
-  // Use filter() to pass the function as its argument
-  var filteredMovies = incomingData.filter(filterMovieRatings);
-
-  //  Check to make sure your are filtering your movies.
-  console.log(filteredMovies);
-
-  // Use the map method with the arrow function to return all the filtered movie titles.
-  var titles = filteredMovies.map(movies =>  movies.title);
-
-  // Use the map method with the arrow function to return all the filtered movie metascores.
-  var ratings = filteredMovies.map(movies => movies.metascore);
-
-  // Check your filtered metascores.
-  console.log(ratings);
-
-  // Create your trace.
-  var trace = {
-    x: titles,
-    y: ratings,
-    type: "bar"
+d3.json("data/data.json").then((data) => {
+  //  Create the Traces
+  var trace1 = {
+    x: data.organ,
+    y: data.survival.map(val => Math.sqrt(val)),
+    type: "box",
+    name: "Cancer Survival",
+    boxpoints: "all"
   };
 
-  // Create the data array for our plot
-  var data = [trace];
+  // Create the data array for the plot
+  var data = [trace1];
 
   // Define the plot layout
   var layout = {
-    title: "The highest critically acclaimed movies.",
-    xaxis: { title: "Title" },
-    yaxis: { title: "Metascore (Critic) Rating"}
+    title: "Square Root of Cancer Survival by Organ",
+    xaxis: { title: "Organ" },
+    yaxis: { title: "Square Root of Survival" }
   };
 
-  // Plot the chart to a div tag with id "bar-plot"
-  Plotly.newPlot("bar-plot", data, layout);
+  // Plot the chart to a div tag with id "plot"
+  Plotly.newPlot("plot", data, layout);
 });
